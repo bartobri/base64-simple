@@ -6,7 +6,6 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
-#include "modules/base64.h"
 
 /*
  * MODULE DESCRIPTION
@@ -41,6 +40,22 @@
  */
 
 /*
+ * Defining 3-4 input/output ratio
+ */
+#define BASE64_ENCODED_COUNT 4
+#define BASE64_DECODED_COUNT 3
+
+/*
+ * Input/Output Structure Definition
+ */
+typedef struct {
+	unsigned char encoded[BASE64_ENCODED_COUNT];
+	unsigned char decoded[BASE64_DECODED_COUNT];
+	size_t index;
+	size_t error;
+} base64;
+
+/*
  * Base64 Character Encoding Table
  */
 static char encoding_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
@@ -58,7 +73,7 @@ static char encoding_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
  * stored in the encoded[] character array member of the returned base64
  * structure.
  */
-base64 base64_encode(base64 data) {
+static base64 base64simple_encode_chars(base64 data) {
 	uint32_t octet_1, octet_2, octet_3;
 	uint32_t combined = 0;
 	
@@ -93,8 +108,8 @@ base64 base64_encode(base64 data) {
  * stored in the decoded[] character array member of the returned base64
  * structure.
  */
-base64 base64_decode(base64 data) {
-	int i, f = 0;
+static base64 base64simple_decode_chars(base64 data) {
+	size_t   i, f = 0;
 	uint32_t octet_1, octet_2, octet_3, octet_4;
 	uint32_t combined = 0;
 	
@@ -152,4 +167,74 @@ base64 base64_decode(base64 data) {
 	data.decoded[2] = (combined >> 0) & 0xFF;
 	
 	return data;
+}
+
+char *base64simple_encode(char *s) {
+	size_t i, j, l;
+	base64 contents = { .index = 0 };
+	char *r;
+	
+	// Initialize r as empty string;
+	r = malloc(1);
+	r[0] = '\0';
+	
+	// Loop over input string and encoding the contents
+	for (i = 0; s[i] != '\0'; ++i) {
+		contents.decoded[contents.index++] = s[i];
+		if (contents.index == BASE64_DECODED_COUNT) {
+			contents = base64simple_encode_chars(contents);
+			l = strlen(r);
+			r = realloc(r, l + BASE64_ENCODED_COUNT);
+			for (j = 0; j < BASE64_ENCODED_COUNT; ++j) {
+				r[l+j] = contents.encoded[j];
+			}
+			r[l+j] = '\0';
+			contents.index = 0;
+		}
+	}
+	if (contents.index > 0) {
+		contents = base64simple_encode_chars(contents);
+		l = strlen(r);
+		r = realloc(r, l + BASE64_ENCODED_COUNT);
+		for (j = 0; j < BASE64_ENCODED_COUNT; ++j) {
+			r[l+j] = contents.encoded[j];
+		}
+		r[l+j] = '\0';
+		contents.index = 0;
+	}
+	
+	return r;
+}
+
+char *base64simple_decode(char *s) {
+	size_t i, j, l;
+	base64 contents = { .index = 0, .error = 0 };
+	char *r;
+	
+	// Initialize r as empty string;
+	r = malloc(1);
+	r[0] = '\0';
+	
+	// Loop over input string and decoding the contents
+	for (i = 0; s[i] != '\0'; ++i) {
+		contents.encoded[contents.index++] = s[i];
+		if (contents.index == BASE64_ENCODED_COUNT) {
+			contents = base64simple_decode_chars(contents);
+			l = strlen(r);
+			r = realloc(r, l + BASE64_DECODED_COUNT);
+			for (j = 0; j < BASE64_DECODED_COUNT; ++j) {
+				r[l+j] = contents.decoded[j];
+			}
+			r[l+j] = '\0';
+			contents.index = 0;
+		}
+
+	}
+	
+	// Return NULL if there was a decode error. Otherwise, return decoded
+	// string.
+	if (contents.error)
+		return NULL;
+	else
+		return r;
 }
