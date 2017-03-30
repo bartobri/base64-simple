@@ -55,7 +55,8 @@ Usage
 
 myprogram.c
 ```
-include "base64simple.h"
+#include <stdio.h>
+#include "base64simple.h"
 
 int main(void) {
 	char *decoded;
