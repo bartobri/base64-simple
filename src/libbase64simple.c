@@ -1,22 +1,20 @@
-// Copyright (c) 2016 Brian Barto
+// Copyright (c) 2017 Brian Barto
 //
 // This program is free software; you can redistribute it and/or modify it
-// under the terms of the GPL License. See LICENSE for more details.
+// under the terms of the MIT License. See LICENSE for more details.
 
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 
 /*
- * MODULE DESCRIPTION
- * 
- * The base64 module was designed to work with unencoded and encoded characters
+ * The base64simple module was designed to work with unencoded and encoded characters
  * in a 3-4 ratio. Which is to say, every 3 unencoded characters will
  * produce 4 encoded characters. This ratio is inherent within the base64
- * specification. The base64 structure defined in base64.h was designed
+ * specification. The base64 structure defined below was designed
  * to facilitate the 3-4 ratio.
  * 
- * Long strings that need to be encoded should be passed to the base64_encode()
+ * Long strings that need to be encoded should be passed to the base64simple_encode_chars()
  * function no more than 3 characters at a time, via the decoded[] character array
  * defined in the base64 structure. Set the structure index to the number of
  * characters you want encoded. This will usually be 3 unless there is a
@@ -28,7 +26,7 @@
  * Repeat this process until the entire string is encoded.
  * 
  * Decoding a string works the same way but in reverse. Feed your encoded
- * string into the base64_decode() function 4 characters at a time, via
+ * string into the base64simple_decode_chars() function 4 characters at a time, via
  * the encoded[] character array defined in the base64 structure. There is
  * no need to set the index when decoding because a properly encoded string
  * will always be evenly divisible by 4. The decode function always assumes
@@ -67,11 +65,11 @@ static char encoding_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
                                 'w', 'x', 'y', 'z', '0', '1', '2', '3',
                                 '4', '5', '6', '7', '8', '9', '+', '/'};
 /*
- * The base64_encode() function encodes the characters stored in the decoded[]
- * character array member of the base64 structure. Only the number of
- * characters specified by index will be encoded. Encoded characters are
- * stored in the encoded[] character array member of the returned base64
- * structure.
+ * The base64simple_encode_chars() function encodes the characters stored
+ * in the decoded[] character array member of the base64 structure. Only
+ * the number of characters specified by index will be encoded. Encoded
+ * characters are stored in the encoded[] character array member of the
+ * returned base64 structure.
  */
 static base64 base64simple_encode_chars(base64 data) {
 	uint32_t octet_1, octet_2, octet_3;
@@ -103,10 +101,10 @@ static base64 base64simple_encode_chars(base64 data) {
 }
 
 /*
- * The base64_decode() function decodes the characters stored in the encoded[]
- * character array member of the base64 structure. Decoded characters are
- * stored in the decoded[] character array member of the returned base64
- * structure.
+ * The base64simple_decode_chars() function decodes the characters stored
+ * in the encoded[] character array member of the base64 structure. Decoded
+ * characters are stored in the decoded[] character array member of the
+ * returned base64 structure.
  */
 static base64 base64simple_decode_chars(base64 data) {
 	size_t   i, f = 0;
@@ -169,6 +167,12 @@ static base64 base64simple_decode_chars(base64 data) {
 	return data;
 }
 
+/*
+ * This function is a simple interface for the base64simple_encode_chars()
+ * function defined above. Client programs are meant to use this function
+ * instead of using base64simple_encode_chars() directly. It takes a pointer
+ * to a string and returns the encoded version, also as a pointer to a string.
+ */
 char *base64simple_encode(char *s) {
 	size_t i, j, l;
 	base64 contents = { .index = 0 };
@@ -206,6 +210,13 @@ char *base64simple_encode(char *s) {
 	return r;
 }
 
+/*
+ * This function is a simple interface for the base64simple_decode_chars()
+ * function defined above. Client programs are meant to use this function
+ * instead of using base64simple_decode_chars() directly. It takes a pointer
+ * to a string and returns the decoded version, also as a pointer to a string.
+ * If a decode error occures, a NULL pointer is returned.
+ */
 char *base64simple_decode(char *s) {
 	size_t i, j, l;
 	base64 contents = { .index = 0, .error = 0 };
