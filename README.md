@@ -50,26 +50,28 @@ Usage
 -----
 
 **Synopsys**
+
+myprogram.c
 ```
 include "base64simple.h"
 
 int main(void) {
-
-    // Coming...
+	char *decoded;
+    char *encoded;
+    
+    decoded = "This is a decoded string";
+    
+    // Encoding a character string
+    encoded = base64simple_encode(decoded);
+    printf("Encoded: %s\n", encoded);
+    
+    // Decoding a character string
+    decoded = base64simple_decode(encoded);
+    printf("Decoded: %s\n", decoded);
     
     return 0;
 }
 ```
-
-**Functions**
-
-`char base64simple_enc(char *)`
-
-Desc Coming...
-
-`char base64simple_dec(char *)`
-
-Desc Coming...
 
 **Compiling**
 
@@ -78,6 +80,22 @@ You must tell the compiler to include the base64simple library.
 ```
 gcc myprogram.c -lbase64simple
 ```
+
+**Functions**
+
+`char *base64simple_encode(char *)`
+
+`char *base64simple_decode(char *)`
+
+I've tried t make usage as simple as possible. Each function takes
+a pointer to a string and and returns the encoded or decoded version,
+also as a pointer to a string. Note that the memory for the return string
+is dynamically allocated, so you may wish to free when it is no longer
+needed if memory is a concern.
+
+Also note that base64simple_decode() will return a NULL pointer if it
+encounters an error when decoding. This only happens when it encounters
+an improperly encoded string as input.
 
 License
 -------
