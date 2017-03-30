@@ -57,19 +57,19 @@ include "base64simple.h"
 
 int main(void) {
 	char *decoded;
-    char *encoded;
+	char *encoded;
     
-    decoded = "This is a decoded string";
+	decoded = "This is a decoded string";
     
-    // Encoding a character string
-    encoded = base64simple_encode(decoded);
-    printf("Encoded: %s\n", encoded);
+	// Encoding a character string
+	encoded = base64simple_encode(decoded);
+	printf("Encoded: %s\n", encoded);
     
-    // Decoding a character string
-    decoded = base64simple_decode(encoded);
-    printf("Decoded: %s\n", decoded);
+	// Decoding a character string
+	decoded = base64simple_decode(encoded);
+	printf("Decoded: %s\n", decoded);
     
-    return 0;
+	return 0;
 }
 ```
 
