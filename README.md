@@ -72,7 +72,11 @@ int main(void) {
 
 	// Encoding
 	encoded = base64simple_encode(decoded, len);
-	printf("Encoded: %s\n", encoded);
+	if (encoded == NULL) {
+		printf("Insufficient Memory!\n");
+	} else {
+		printf("Encoded: %s\n", encoded);
+	}
 
 	// Decoding
 	decoded = base64simple_decode(encoded);
@@ -96,7 +100,8 @@ gcc myprogram.c -lbase64simple
 
 The base64simple_encode() function encodes the first **n** bytes of the
 character string pointed to by **s**. It returns a pointer to a null-terminated
-string containing the encoded result.
+string containing the encoded result. A null poointer is returned if there
+is insufficient memory for the encoded string.
 
 `char *base64simple_decode(char *)`
 

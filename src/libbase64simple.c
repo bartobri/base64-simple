@@ -180,10 +180,14 @@ char *base64simple_encode(char *a, size_t s) {
 	char *r;
 	
 	// Calculating size of return string and allocating memory
-	if (s % 3 == 0)
-		r = malloc(((s / 3) * 4) + 1);
+	if (s % BASE64_DECODED_COUNT == 0)
+		r = malloc(((s / BASE64_DECODED_COUNT) * 4) + 1);
 	else
-		r = malloc((((s / 3) + 1) * 4) + 1);
+		r = malloc((((s / BASE64_DECODED_COUNT) + 1) * 4) + 1);
+	
+	// Check for a successful malloc
+	if (r == NULL)
+		return r;
 	
 	// Loop over input string and encoding the contents
 	for (l = 0, i = 0; i < s; ++i) {
