@@ -8,6 +8,10 @@ The goal of this project is to provide a dynamically linked library that
 makes it dead-simple to encode and decode base64 strings from within your
 program code. See the Usage section for more info.
 
+**NOTE:** This library only works with null-terminated strings. If you wish
+to encode/decode data that includes null characters, this library is not
+for you.
+
 Table of Contents
 -----------------
 
