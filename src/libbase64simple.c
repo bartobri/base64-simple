@@ -111,6 +111,10 @@ static base64 base64simple_decode_chars(base64 data) {
 	uint32_t octet_1, octet_2, octet_3, octet_4;
 	uint32_t combined = 0;
 	
+	// Set the index to the decode count and decrement for each '=' we find.
+	// This tells the calling function how many decoded characters are valid.
+	data.index = BASE64_DECODED_COUNT;
+	
 	// Change encoded chars to decimal index in encoding_table
 	for (i = 0; i < 64; ++i)
 		if (data.encoded[0] == encoding_table[i]) {
@@ -131,7 +135,14 @@ static base64 base64simple_decode_chars(base64 data) {
 			break;
 		} else if (data.encoded[2] == '=') {
 			data.encoded[2] = 0;
-			++f;
+
+			// Make sure the next char is also a '='. Otherwise don't
+			// increment f and return an error below.
+			if (data.encoded[3] == '=') {
+				--(data.index);
+				++f;
+			}
+
 			break;
 		}
 	for (i = 0; i < 64; ++i)
@@ -141,6 +152,7 @@ static base64 base64simple_decode_chars(base64 data) {
 			break;
 		} else if (data.encoded[3] == '=') {
 			data.encoded[3] = 0;
+			--(data.index);
 			++f;
 			break;
 		}
@@ -240,12 +252,19 @@ unsigned char *base64simple_decode(char *a, size_t s, size_t *rs) {
 		if (contents.index == BASE64_ENCODED_COUNT) {
 			contents = base64simple_decode_chars(contents);
 
+			// Invalid encoding. Break out of loop.
 			if (contents.error)
 				break;
 
-			for (j = 0; j < BASE64_DECODED_COUNT; ++j, ++l) {
+			// Append decoded characters to return string
+			for (j = 0; j < contents.index; ++j, ++l)
 				r[l] = contents.decoded[j];
-			}
+			
+			// If we encountered any '=' signs we reached the signature
+			// for the end of a base64 string. Break out of loop.
+			if (contents.index < BASE64_DECODED_COUNT)
+				break;
+				
 			contents.index = 0;
 		}
 
