@@ -6,7 +6,7 @@ Base64 Simple
 
 The goal of this project is to provide a dynamically linked library that
 makes it dead-simple to encode and decode base64 strings from within your
-program code. See the Usage section for more info about how it works.
+program code. See the Usage section for more info.
 
 Table of Contents
 -----------------
