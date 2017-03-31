@@ -231,6 +231,10 @@ char *base64simple_decode(char *s) {
 		contents.encoded[contents.index++] = s[i];
 		if (contents.index == BASE64_ENCODED_COUNT) {
 			contents = base64simple_decode_chars(contents);
+
+			if (contents.error)
+				break;
+
 			l = strlen(r);
 			r = realloc(r, l + BASE64_DECODED_COUNT);
 			for (j = 0; j < BASE64_DECODED_COUNT; ++j) {
