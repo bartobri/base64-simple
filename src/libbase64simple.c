@@ -171,39 +171,40 @@ static base64 base64simple_decode_chars(base64 data) {
  * This function is a simple interface for the base64simple_encode_chars()
  * function defined above. Client programs are meant to use this function
  * instead of using base64simple_encode_chars() directly. It takes a pointer
- * to a string and returns the encoded version, also as a pointer to a string.
+ * to a character array and the array size, and returns a pointer to an
+ * character array containing the encoded result with a null string terminator.
  */
-char *base64simple_encode(char *s) {
+char *base64simple_encode(char *a, size_t s) {
 	size_t i, j, l;
 	base64 contents = { .index = 0 };
 	char *r;
 	
-	// Initialize r as empty string;
-	r = malloc(1);
-	r[0] = '\0';
+	// Calculating size of return string and allocating memory
+	if (s % 3 == 0)
+		r = malloc(((s / 3) * 4) + 1);
+	else
+		r = malloc((((s / 3) + 1) * 4) + 1);
 	
 	// Loop over input string and encoding the contents
-	for (i = 0; s[i] != '\0'; ++i) {
-		contents.decoded[contents.index++] = s[i];
+	for (l = 0, i = 0; i < s; ++i) {
+		contents.decoded[contents.index++] = a[i];
 		if (contents.index == BASE64_DECODED_COUNT) {
 			contents = base64simple_encode_chars(contents);
-			l = strlen(r);
-			r = realloc(r, l + BASE64_ENCODED_COUNT);
 			for (j = 0; j < BASE64_ENCODED_COUNT; ++j) {
 				r[l+j] = contents.encoded[j];
 			}
 			r[l+j] = '\0';
+			l += 4;
 			contents.index = 0;
 		}
 	}
 	if (contents.index > 0) {
 		contents = base64simple_encode_chars(contents);
-		l = strlen(r);
-		r = realloc(r, l + BASE64_ENCODED_COUNT);
 		for (j = 0; j < BASE64_ENCODED_COUNT; ++j) {
 			r[l+j] = contents.encoded[j];
 		}
 		r[l+j] = '\0';
+		l += 4;
 		contents.index = 0;
 	}
 	

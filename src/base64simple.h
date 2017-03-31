@@ -9,7 +9,7 @@
 /*
  * Function Prototypes
  */
-char *base64simple_encode(char *);
+char *base64simple_encode(char *, size_t);
 char *base64simple_decode(char *);
 
 #endif

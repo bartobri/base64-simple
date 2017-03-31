@@ -60,22 +60,24 @@ Usage
 myprogram.c
 ```
 #include <stdio.h>
+#include <string.h>
 #include "base64simple.h"
 
 int main(void) {
-	char *decoded;
-	char *encoded;
-    
-	decoded = "This is a decoded string";
-    
-	// Encoding a character string
-	encoded = base64simple_encode(decoded);
+	char *decoded, *encoded;
+	size_t len;
+
+	decoded = "This is a decoded string.";
+	len = strlen(decoded);
+
+	// Encoding
+	encoded = base64simple_encode(decoded, len);
 	printf("Encoded: %s\n", encoded);
-    
-	// Decoding a character string
+
+	// Decoding
 	decoded = base64simple_decode(encoded);
 	printf("Decoded: %s\n", decoded);
-    
+
 	return 0;
 }
 ```
@@ -90,7 +92,11 @@ gcc myprogram.c -lbase64simple
 
 **Functions**
 
-`char *base64simple_encode(char *)`
+`char *base64simple_encode(char *s, size_t n)`
+
+The base64simple_encode() function encodes the first **n** bytes of the
+character string pointed to by **s**. It returns a pointer to a null-terminated
+string containing the encoded result.
 
 `char *base64simple_decode(char *)`
 
