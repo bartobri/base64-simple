@@ -152,10 +152,10 @@ static base64 base64simple_decode_chars(base64 data) {
 	}
 	
 	// Assigning octets
-	octet_1 = (unsigned char)data.encoded[0];
-	octet_2 = (unsigned char)data.encoded[1];
-	octet_3 = (unsigned char)data.encoded[2];
-	octet_4 = (unsigned char)data.encoded[3];
+	octet_1 = data.encoded[0];
+	octet_2 = data.encoded[1];
+	octet_3 = data.encoded[2];
+	octet_4 = data.encoded[3];
 	
 	// Combine octets into a single 32 bit int
 	combined = (octet_1 << 18) + (octet_2 << 12) + (octet_3 << 6) + octet_4;
