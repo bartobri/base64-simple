@@ -47,7 +47,7 @@
  * Input/Output Structure Definition
  */
 typedef struct {
-	unsigned char encoded[BASE64_ENCODED_COUNT];
+	char encoded[BASE64_ENCODED_COUNT];
 	unsigned char decoded[BASE64_DECODED_COUNT];
 	size_t index;
 	size_t error;
@@ -174,7 +174,7 @@ static base64 base64simple_decode_chars(base64 data) {
  * to a character array and the array size, and returns a pointer to a
  * null-terminated string containing the encoded result.
  */
-char *base64simple_encode(char *a, size_t s) {
+char *base64simple_encode(unsigned char *a, size_t s) {
 	size_t i, j, l;
 	base64 contents = { .index = 0 };
 	char *r;
@@ -219,10 +219,10 @@ char *base64simple_encode(char *a, size_t s) {
  * to a string and returns the decoded version, also as a pointer to a string.
  * If a decode error occures, a NULL pointer is returned.
  */
-char *base64simple_decode(char *a, size_t s, size_t *rs) {
+unsigned char *base64simple_decode(char *a, size_t s, size_t *rs) {
 	size_t i, j, l;
 	base64 contents = { .index = 0, .error = 0 };
-	char *r;
+	unsigned char *r;
 	
 	// Calculating size of return string and allocating memory
 	if (s % BASE64_ENCODED_COUNT == 0)

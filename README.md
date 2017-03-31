@@ -8,10 +8,6 @@ The goal of this project is to provide a dynamically linked library that
 makes it dead-simple to encode and decode base64 strings from within your
 program code. See the Usage section for more info.
 
-**NOTE:** This library only works with null-terminated strings. If you wish
-to encode/decode data that includes null characters, this library is not
-for you.
-
 Table of Contents
 -----------------
 
@@ -67,10 +63,10 @@ int main(void) {
 	char *decoded, *encoded;
 	size_t len;
 
-	decoded = "This is a decoded string.";
-	len = strlen(decoded);
 
 	// Encoding
+	decoded = "This is a decoded string.";
+	len = strlen(decoded);
 	encoded = base64simple_encode(decoded, len);
 	if (encoded == NULL) {
 		printf("Insufficient Memory!\n");
@@ -78,10 +74,12 @@ int main(void) {
 		printf("Encoded: %s\n", encoded);
 	}
 
+
 	// Decoding
 	size = strlen(encoded);
 	decoded = base64simple_decode(encoded, size, &r_size);
 	printf("Decoded string length: %d\n", r_size);
+
 
 	return 0;
 }
@@ -97,14 +95,14 @@ gcc myprogram.c -lbase64simple
 
 **Functions**
 
-`char *base64simple_encode(char *s, size_t n)`
+`char *base64simple_encode(unsigned char *s, size_t n)`
 
 The base64simple_encode() function encodes the first **n** bytes of the
 character string pointed to by **s**. It returns a pointer to a null-terminated
 string containing the encoded result. A null poointer is returned if there
 is insufficient memory for the encoded string.
 
-`char *base64simple_decode(char *s, size_t n, size_t *x)`
+`unsigned char *base64simple_decode(char *s, size_t n, size_t *x)`
 
 The base64simple_decode() function decodes the first **n** bytes of the
 character string pointed to by **s** (unless it encounters the base64
