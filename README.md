@@ -61,19 +61,17 @@ myprogram.c
 
 int main(void) {
 	char *decoded, *encoded;
-	size_t len;
-
+	size_t size, r_size;
 
 	// Encoding
 	decoded = "This is a decoded string.";
-	len = strlen(decoded);
-	encoded = base64simple_encode(decoded, len);
+	size = strlen(decoded);
+	encoded = base64simple_encode(decoded, size);
 	if (encoded == NULL) {
 		printf("Insufficient Memory!\n");
 	} else {
 		printf("Encoded: %s\n", encoded);
 	}
-
 
 	// Decoding
 	size = strlen(encoded);
