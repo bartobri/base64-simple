@@ -10,6 +10,6 @@
  * Function Prototypes
  */
 char *base64simple_encode(char *, size_t);
-char *base64simple_decode(char *);
+char *base64simple_decode(char *, size_t, size_t *);
 
 #endif

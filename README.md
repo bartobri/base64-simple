@@ -79,8 +79,9 @@ int main(void) {
 	}
 
 	// Decoding
-	decoded = base64simple_decode(encoded);
-	printf("Decoded: %s\n", decoded);
+	size = strlen(encoded);
+	decoded = base64simple_decode(encoded, size, &r_size);
+	printf("Decoded string length: %d\n", r_size);
 
 	return 0;
 }
@@ -103,17 +104,17 @@ character string pointed to by **s**. It returns a pointer to a null-terminated
 string containing the encoded result. A null poointer is returned if there
 is insufficient memory for the encoded string.
 
-`char *base64simple_decode(char *)`
+`char *base64simple_decode(char *s, size_t n, size_t *x)`
 
-I've tried t make usage as simple as possible. Each function takes
-a pointer to a string and and returns the encoded or decoded version,
-also as a pointer to a string. Note that the memory for the return string
-is dynamically allocated, so you may wish to free when it is no longer
-needed if memory is a concern.
-
-Also note that base64simple_decode() will return a NULL pointer if it
-encounters an error when decoding. This only happens when it encounters
-an improperly encoded string as input.
+The base64simple_decode() function decodes the first **n** bytes of the
+character string pointed to by **s** (unless it encounters the base64
+end-of-stream signature before that). It returns a pointer to an unsigned
+character string containing the decoded result, and it assigns the length
+of the decoded string to **x**. Note that this string is *NOT* null
+terminated, so you must use the value of **x** to examine the contents
+without encountering an out-of-bounds error. A null pointer is returned if **s**
+is not properly encoded, or if there is insufficient memory for the decoded
+string.
 
 License
 -------
