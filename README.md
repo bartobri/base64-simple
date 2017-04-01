@@ -57,6 +57,7 @@ myprogram.c
 ```
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "base64simple.h"
 
 int main(void) {
