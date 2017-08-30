@@ -134,4 +134,4 @@ MIT License (MIT). See [LICENSE](LICENSE) for more details.
 Tips
 ----
 
-[Tips are always appreciated!](https://github.com/bartobri/tips).
+[Tips are always appreciated!](https://github.com/bartobri/tips)
