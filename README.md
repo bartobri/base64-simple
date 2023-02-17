@@ -1,5 +1,7 @@
 ![Version](https://img.shields.io/badge/Version-0.1.0-green.svg)
 
+Like this project? Consider sponsoring me: [https://github.com/sponsors/bartobri](https://github.com/sponsors/bartobri)
+
 Base64 Simple
 =============
 
@@ -13,7 +15,6 @@ Table of Contents
 1. [Download and Install](#download-and-install)
 2. [Usage](#usage)
 3. [License](#license)
-4. [Tips](#tips)
 
 Download and Install
 --------------------
@@ -131,7 +132,3 @@ License
 This program is free software; you can redistribute it and/or modify it under the terms of the the
 MIT License (MIT). See [LICENSE](LICENSE) for more details.
 
-Tips
-----
-
-[Tips are always appreciated!](https://github.com/bartobri/tips)
